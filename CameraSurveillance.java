@@ -8,7 +8,10 @@ public class CameraSurveillance {
 	
 	public static void main(String[] args) {
 		
+		//init de graphe et matrice d'adjacence
 		Graphe ma = new Graphe(49);
+		
+		// ajout des arretes entre emplacements des cameras;
 		ma.ajoutArete(1, 2);
 		ma.ajoutArete(1, 3);
 		ma.ajoutArete(2, 41);
@@ -62,6 +65,9 @@ public class CameraSurveillance {
 		ma.ajoutArete(45, 47);
 		ma.ajoutArete(47, 48);
 		
+		// 46,46 parceque l'emplacement 46 doit avoir une caméra
+		ma.ajoutArete(46, 46);
+		
 		//System.out.println(ma.toString());
 		
 		calcul(ma);
@@ -92,7 +98,7 @@ public class CameraSurveillance {
 			simplexe.addMinimize(objectif);
 			
 			
-			// les contraintes (Xi + Xj >= 1)	
+			// les contraintes (Xi + Xj >= 1) pour tout (i,j) appartient à R (l'ensemble des rues entre emplacements)
 			for(int i = 0; i < n; i++) {
 				for(int j = 0; j < n; j++) {
 					if(adj.adjacent(i, j)) {
@@ -108,10 +114,12 @@ public class CameraSurveillance {
 			
 			// Afficher des résultat
 			System.out.println("Voici la valeur de la fonction objectif (Nombre des caméras qu'on va placé): "+ simplexe.getObjValue());
-			System.out.println(" Voici les valeurs des variables de décision: ") ;
+			System.out.println(" Voici les valeurs vrai des variables de décision (l'emplacement des caméras): ") ;
 			for (int i=0;i<n;i++) {
-				int k = i + 1;
-				System.out.println( "X"+k+ " = "+ simplexe.getValue(x[i]));				
+				if(simplexe.getValue(x[i]) != 0.0) {
+					int k = i + 1;
+					System.out.println( "X"+k+ " = "+ simplexe.getValue(x[i]));
+				}				
 			}
 		} catch (IloException e){
 			System.out.print("Exception levée " + e);
