@@ -35,7 +35,7 @@ public class Graphe {
 		return matriceAdj[i][j];
 	}
 
-	// Print the matrix
+	// print matrice
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append("    ");
